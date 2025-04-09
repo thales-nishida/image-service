@@ -9,11 +9,11 @@ public class ImageTest {
 
     @Test
     public void givenAValidParams_whenCallNewImage_thenInstantiateAImage() {
-        final var expectedIdentifierName  = "123456";
+        final var expectedIdentifierName = "123456";
         final var expectedListImage = List.of("teste.img", "test2.img");
 
         final var actualImage =
-                Image.newImage(expectedIdentifierName,expectedListImage);
+                Image.newImage(expectedIdentifierName, expectedListImage);
 
         Assertions.assertNotNull(actualImage);
         Assertions.assertNotNull(actualImage.getId());
@@ -22,4 +22,25 @@ public class ImageTest {
         Assertions.assertNotNull(actualImage.getCreatedAt());
         Assertions.assertNotNull(actualImage.getUpdatedAt());
     }
+
+
+    @Test
+    public void givenAInvalidNullName_whenCallNewImage_thenShouldReturnError() {
+        final String expectedIdentifierName = null;
+        final var expectedListImage = List.of("teste.img", "test2.img");
+        final var expectErrorMessage = "'name' should not be null";
+        final var expectErrorCount = 1;
+
+        final var actualImage =
+                Image.newImage(expectedIdentifierName, expectedListImage);
+
+
+        final var actualException =
+                Assertions.assertThrows(DomainExeption.class, () -> actualImage.validate());
+
+        Assertions.assertEquals(expectErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectErrorMessage, actualException.getErrors().get(0).getMessage());
+    }
+
+
 }
