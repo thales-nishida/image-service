@@ -1,41 +1,41 @@
 package br.com.thalesnishida.image.service.domain.image;
 
+import br.com.thalesnishida.image.service.domain.AggregateRoot;
+
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
 
-public class Image {
+public class Image extends AggregateRoot<ImageID> {
 
-    private String id;
     private String identifierName;
     private List<String> imageList;
     private Instant createdAt;
     private Instant updatedAt;
 
     private Image(
-            final String id,
-            final String identifierName,
-            final List<String> imageList,
-            final Instant createdAt,
-            final Instant updatedAt
+            final ImageID anID,
+            final String aIdentifierName,
+            final List<String> aImageList,
+            final Instant aCreationDate,
+            final Instant aUpdatedAt
     ) {
-        this.id = id;
-        this.identifierName = identifierName;
-        this.imageList = imageList;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        super(anID);
+        this.identifierName = aIdentifierName;
+        this.imageList = aImageList;
+        this.createdAt = aCreationDate;
+        this.updatedAt = aUpdatedAt;
     }
 
     public static Image newImage(
             final String aIdentifierName,
             final List<String> aImageList
     ) {
-        final var id = UUID.randomUUID().toString();
+        final var id = ImageID.unique();
         final var now = Instant.now();
         return new Image(id, aIdentifierName, aImageList, now, now);
     }
 
-    public String getId() {
+    public ImageID getId() {
         return id;
     }
 
