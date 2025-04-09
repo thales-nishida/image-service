@@ -18,7 +18,7 @@ public class ImageTest {
         Assertions.assertNotNull(actualImage);
         Assertions.assertNotNull(actualImage.getId());
         Assertions.assertEquals(expectedIdentifierName, actualImage.getIdentifierName());
-        Assertions.assertEquals(expectedListImage, actualImage.getListImage());
+        Assertions.assertEquals(expectedListImage, actualImage.getImageList());
         Assertions.assertNotNull(actualImage.getCreatedAt());
         Assertions.assertNotNull(actualImage.getUpdatedAt());
     }
