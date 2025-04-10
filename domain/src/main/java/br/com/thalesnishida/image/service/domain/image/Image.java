@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Image extends AggregateRoot<ImageID> {
 
-    private String identifierName;
-    private List<String> imageList;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private final String identifierName;
+    private final List<String> imageList;
+    private final Instant createdAt;
+    private final Instant updatedAt;
 
     private Image(
             final ImageID anID,
