@@ -1,6 +1,7 @@
 package br.com.thalesnishida.image.service.domain.image;
 
 import br.com.thalesnishida.image.service.domain.AggregateRoot;
+import br.com.thalesnishida.image.service.domain.validation.ValidationHandler;
 
 import java.time.Instant;
 import java.util.List;
@@ -33,6 +34,11 @@ public class Image extends AggregateRoot<ImageID> {
         final var id = ImageID.unique();
         final var now = Instant.now();
         return new Image(id, aIdentifierName, aImageList, now, now);
+    }
+
+    @Override
+    public void validate(final ValidationHandler handler) {
+        new ImageValidator(this, handler).validate();
     }
 
     public ImageID getId() {

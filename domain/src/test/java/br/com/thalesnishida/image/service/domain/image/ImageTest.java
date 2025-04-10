@@ -1,5 +1,7 @@
 package br.com.thalesnishida.image.service.domain.image;
 
+import br.com.thalesnishida.image.service.domain.exceptions.DomainException;
+import br.com.thalesnishida.image.service.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +38,10 @@ public class ImageTest {
 
 
         final var actualException =
-                Assertions.assertThrows(DomainExeption.class, () -> actualImage.validate());
+                Assertions.assertThrows(DomainException.class, () -> actualImage.validate(new ThrowsValidationHandler()));
 
         Assertions.assertEquals(expectErrorCount, actualException.getErrors().size());
-        Assertions.assertEquals(expectErrorMessage, actualException.getErrors().get(0).getMessage());
+        Assertions.assertEquals(expectErrorMessage, actualException.getErrors().get(0).message());
     }
 
 
