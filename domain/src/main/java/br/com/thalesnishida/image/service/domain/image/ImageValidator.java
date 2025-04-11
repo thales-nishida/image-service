@@ -22,15 +22,19 @@ public class ImageValidator extends Validator {
     }
 
     private void checkIdentifierName() {
-        if (this.image.getIdentifierName() == null) {
+        final var identifierName = this.image.getIdentifierName();
+
+        if (identifierName == null) {
             this.validationHandler().append(new Error("'name' should not be null"));
+            return;
         }
 
-        if (this.image.getIdentifierName().isEmpty() || this.image.getIdentifierName().isBlank()) {
+        if (identifierName.isBlank()) {
             this.validationHandler().append(new Error("'name' should not be empty"));
+            return;
         }
 
-        if (this.image.getIdentifierName().length() <= MIN_LENGTH || this.image.getIdentifierName().length() > MAX_LENGTH) {
+        if (identifierName.length() <= MIN_LENGTH || identifierName.length() > MAX_LENGTH) {
             this.validationHandler().append(new Error("'name' should be between 2 and 255 characters"));
         }
     }
@@ -38,17 +42,20 @@ public class ImageValidator extends Validator {
     private void checkImageList() {
         final var list = this.image.getImageList();
 
-        if (list != null && list.contains(null)) {
+        if (list == null) {
             this.validationHandler().append(new Error("'imageList' should not contain null"));
+            return;
         }
 
-        if (list != null && list.isEmpty()) {
+        if (list.isEmpty()) {
             this.validationHandler().append(new Error("'imageList' should not be empty"));
+            return;
         }
 
         for (String item: this.image.getImageList()) {
-            if(item.isEmpty() && list != null) {
+            if(item.isEmpty()) {
                 this.validationHandler().append(new Error("'imageList' should not contain empty item"));
+                return;
             }
         }
     }

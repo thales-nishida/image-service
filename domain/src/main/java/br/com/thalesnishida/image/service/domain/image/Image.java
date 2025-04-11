@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Image extends AggregateRoot<ImageID> {
 
-    private final String identifierName;
-    private final List<String> imageList;
+    private String identifierName;
+    private List<String> imageList;
+    private Instant updatedAt;
     private final Instant createdAt;
-    private final Instant updatedAt;
 
     private Image(
             final ImageID anID,
@@ -39,6 +39,16 @@ public class Image extends AggregateRoot<ImageID> {
     @Override
     public void validate(final ValidationHandler handler) {
         new ImageValidator(this, handler).validate();
+    }
+
+    public Image update(
+            final String identifierName,
+            final List<String> aImageList
+    ) {
+        this.identifierName = identifierName;
+        this.imageList = aImageList;
+        this.updatedAt = Instant.now();
+        return this;
     }
 
     public ImageID getId() {
