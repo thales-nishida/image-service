@@ -4,8 +4,7 @@ import br.com.thalesnishida.image.service.domain.image.Image;
 
 import java.util.List;
 
-public class UseCase {
-    public Image execute() {
-        return Image.newImage("dsadasd", List.of("sdsad", "asdsad"));
-    }
+public abstract class UseCase<IN, OUT> {
+
+    public abstract OUT execute(IN anIn);
 }
