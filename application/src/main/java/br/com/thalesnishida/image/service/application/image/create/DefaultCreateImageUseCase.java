@@ -2,7 +2,7 @@ package br.com.thalesnishida.image.service.application.image.create;
 
 import br.com.thalesnishida.image.service.domain.image.Image;
 import br.com.thalesnishida.image.service.domain.image.ImageGateway;
-import br.com.thalesnishida.image.service.domain.validation.handler.ThrowsValidationHandler;
+import br.com.thalesnishida.image.service.domain.validation.handler.Notification;
 
 import java.util.Objects;
 
@@ -19,8 +19,14 @@ public class DefaultCreateImageUseCase extends CreateImageUseCase {
         final var aIdentifierName = aCommand.identifierName();
         final var aImageList = aCommand.imageList();
 
+        final var notification = Notification.create();
+
         final var aImage = Image.newImage(aIdentifierName, aImageList);
-        aImage.validate(new ThrowsValidationHandler());
+        aImage.validate(notification);
+
+        if(notification.hasError()) {
+
+        }
 
         return CreateImageOutput.from(this.imageGateway.create(aImage));
     }
