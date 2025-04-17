@@ -40,7 +40,7 @@ public class UseCaseTest {
         when(imageGateway.create(any()))
                 .thenAnswer(returnsFirstArg());
 
-        final var actualOutPut = useCase.execute(aCommand);
+        final var actualOutPut = useCase.execute(aCommand).get();
 
         Assertions.assertNotNull(actualOutPut);
         Assertions.assertNotNull(actualOutPut.id());
@@ -63,11 +63,10 @@ public class UseCaseTest {
 
         final var aCommand = CreateImageCommand.with(expectedIdentifierName, expectedImageList);
 
-        final var actualException =
-                Assertions.assertThrows(DomainException.class, () -> useCase.execute(aCommand));
+        final var notification = useCase.execute(aCommand).getLeft();
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
-        Assertions.assertEquals(expectedErrorCount, actualException.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
+        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
 
         Mockito.verify(imageGateway, times(0)).create(any());
     }
@@ -77,15 +76,16 @@ public class UseCaseTest {
         final String expectedIdentifierName = "test";
         final var expectedImageList = List.of("image1", "image2");
         final var expectedErrorMessage = "Gateway Error";
+        final var expectedErrorCount = 1;
 
         final var aCommand = CreateImageCommand.with(expectedIdentifierName, expectedImageList);
 
         when(imageGateway.create(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var actualException =
-                Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(aCommand));
+        final var notification  = useCase.execute(aCommand).getLeft();
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
+        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
 
         Mockito.verify(imageGateway, times(1)).create(argThat(aImage ->
                 Objects.equals(expectedIdentifierName, aImage.getIdentifierName())
